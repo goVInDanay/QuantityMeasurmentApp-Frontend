@@ -2,11 +2,74 @@
 <html>
   <head>
     <title>Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
+
   <body>
     <h2>Dashboard</h2>
+
+    <!-- USER -->
     <div id="user"></div>
     <button onclick="logout()">Logout</button>
+
+    <hr />
+
+    <!-- CALCULATOR -->
+    <div class="container">
+      <h3>Quantity Calculator</h3>
+
+      <!-- ✅ Measurement Type -->
+      <label>Select Type:</label>
+      <select id="measurementType">
+        <option value="">-- Select Type --</option>
+        <option value="LengthUnit">Length</option>
+        <option value="VolumeUnit">Volume</option>
+        <option value="WeightUnit">Weight</option>
+        <option value="TemperatureUnit">Temperature</option>
+      </select>
+
+      <br /><br />
+
+      <!-- LEFT SIDE -->
+      <div>
+        <input type="number" id="value1" placeholder="Enter value" />
+        <select id="unit1"></select>
+      </div>
+
+      <br />
+
+      <!-- RIGHT SIDE -->
+      <div>
+        <input
+          type="number"
+          id="value2"
+          placeholder="Converted value"
+          disabled
+        />
+        <select id="unit2"></select>
+      </div>
+
+      <br /><br />
+
+      <!-- ACTION BUTTONS -->
+      <div>
+        <button onclick="add()">Add</button>
+        <button onclick="subtract()">Subtract</button>
+        <button onclick="convert()">Convert</button>
+      </div>
+
+      <h3 id="result"></h3>
+    </div>
+
+    <hr />
+
+    <!-- HISTORY -->
+    <div>
+      <h3>History</h3>
+      <ul id="historyList"></ul>
+    </div>
+
+    <!-- SCRIPT -->
     <script src="js/dashboard.js"></script>
   </body>
 </html>
