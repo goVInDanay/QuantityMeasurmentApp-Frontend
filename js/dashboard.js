@@ -12,8 +12,12 @@ async function loadUser() {
     });
 
     if (!res.ok) {
-      window.location.href = "index.html";
-      return;
+      // ❌ DON'T redirect
+      document.getElementById("user").innerHTML = `
+        <p>Guest User</p>
+        <a href="index.html">Login to view history</a>
+      `;
+      return false;
     }
 
     const user = await res.json();
@@ -22,8 +26,11 @@ async function loadUser() {
       <p>Name: ${user.name}</p>
       <p>Email: ${user.email}</p>
     `;
+
+    return true; // ✅ logged in
   } catch (err) {
     console.error(err);
+    return false;
   }
 }
 
@@ -224,7 +231,13 @@ async function convert() {
 // 📜 HISTORY
 // =======================
 
-async function loadHistory() {
+async function loadHistory(isLoggedIn) {
+  if (!isLoggedIn) {
+    document.getElementById("historyList").innerHTML =
+      "<li>🔒 Login to view history</li>";
+    return;
+  }
+
   const res = await fetch(`${API_BASE}/history`, {
     method: "GET",
     credentials: "include",
@@ -265,6 +278,9 @@ document.getElementById("unit2").addEventListener("change", convert);
 // =======================
 // 🚀 INIT
 // =======================
+async function init() {
+  const isLoggedIn = await loadUser(); // check login
+  loadHistory(isLoggedIn); // pass status
+}
 
-loadUser();
-loadHistory();
+init();
