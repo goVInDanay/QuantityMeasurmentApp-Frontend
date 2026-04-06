@@ -1,6 +1,6 @@
 import type { QuantityDTO, CompareRequest, HistoryItem, User } from "../types";
 
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "quantitymeasurmentapp-production.up.railway.app";
 
 const defaultOpts: RequestInit = {
   credentials: "include",
