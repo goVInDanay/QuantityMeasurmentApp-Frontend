@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Calculator from "../components/Calculator";
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth(true);
+  const { user, loading } = useAuth(false);
 
   const handleHistoryUpdate = useCallback(() => {}, []);
 
