@@ -41,7 +41,7 @@ export async function logoutApi(): Promise<void> {
 export const googleLoginUrl = `${API_BASE}/oauth2/authorization/google`;
 
 export async function getUserProfile(): Promise<User | null> {
-  const res = await fetch(`${API_BASE}/user/profile`, {
+  const res = await fetch(`${API_BASE}/api/user/profile`, {
     method: "GET",
     credentials: "include",
   });
