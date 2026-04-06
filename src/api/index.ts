@@ -1,6 +1,6 @@
 import type { QuantityDTO, CompareRequest, HistoryItem, User } from "../types";
 
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "quantitymeasurmentapp-production.up.railway.app";
 
 const defaultOpts: RequestInit = {
   credentials: "include",
@@ -38,7 +38,7 @@ export async function logoutApi(): Promise<void> {
   });
 }
 
-export const googleLoginUrl = `http://localhost:8080/oauth2/authorization/google`;
+export const googleLoginUrl = `${API_BASE}/oauth2/authorization/google`;
 
 export async function getUserProfile(): Promise<User | null> {
   const res = await fetch(`${API_BASE}/user/profile`, {
