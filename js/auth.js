@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "quantitymeasurmentapp-production.up.railway.app/api";
 
 function switchTab(tab) {
   const isLogin = tab === "login";
@@ -102,5 +102,6 @@ async function handleLogin() {
 }
 
 function googleLogin() {
-  window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  window.location.href =
+    "quantitymeasurmentapp-production.up.railway.app/oauth2/authorization/google";
 }

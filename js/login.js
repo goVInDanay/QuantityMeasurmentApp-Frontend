@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "quantitymeasurmentapp-production.up.railway.app/api";
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -29,7 +29,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 });
 
 function googleLogin() {
-  window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  window.location.href =
+    "quantitymeasurmentapp-production.up.railway.app/oauth2/authorization/google";
 }
 
 function goToRegister() {
