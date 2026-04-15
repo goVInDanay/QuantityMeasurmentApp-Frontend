@@ -2,25 +2,36 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { getHistory } from "../api";
 import Navbar from "../components/Navbar";
-import type { HistoryItem } from "../types";
+import type { HistoryItem, User } from "../types";
 
 export default function HistoryPage() {
-  const { user, loading } = useAuth(true);
+  const { user, loading, setUser } = useAuth(true);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [fetching, setFetching] = useState(true);
   const [search, setSearch] = useState("");
 
+  // ✅ Fetch history safely
   const refresh = useCallback(async () => {
-    setFetching(true);
-    const items = await getHistory();
-    setHistory(items);
-    setFetching(false);
+    try {
+      setFetching(true);
+      const items = await getHistory();
+      setHistory(items || []);
+    } catch (e) {
+      console.error("History fetch failed:", e);
+      setHistory([]);
+    } finally {
+      setFetching(false);
+    }
   }, []);
 
+  // ✅ Only fetch AFTER user is loaded
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (user) {
+      refresh();
+    }
+  }, [user, refresh]);
 
+  // ✅ Loading screen
   if (loading) {
     return (
       <div className="page-loader">
@@ -29,12 +40,30 @@ export default function HistoryPage() {
     );
   }
 
+  // ✅ Unauthorized protection
+  if (!user) {
+    return <div>Please login</div>;
+  }
+
+  // ✅ Format history text (FIXED CORE ISSUE)
+  const formatText = (item: any) => {
+    if (item.error) return item.errorMessage;
+
+    const first = `${item.thisValue ?? ""} ${item.thisUnit ?? ""}`;
+    const second =
+      item.thatValue != null
+        ? ` → ${item.thatValue} ${item.thatUnit ?? ""}`
+        : "";
+
+    return first + second;
+  };
+
+  // ✅ Search fix
   const displayed = [...history].reverse().filter((item) => {
     const q = search.toLowerCase();
     if (!q) return true;
-    const text = item.error
-      ? item.errorMessage
-      : `${item.input} = ${item.result}`;
+
+    const text = formatText(item);
     return text.toLowerCase().includes(q);
   });
 
@@ -43,13 +72,15 @@ export default function HistoryPage() {
 
   return (
     <>
-      <Navbar user={user} />
+      <Navbar user={user} setUser={setUser} />
+
       <div className="history-page">
         <div className="history-page-header">
           <div>
             <h1 className="history-page-title">History</h1>
             <p className="history-page-subtitle">All your past calculations</p>
           </div>
+
           <button className="btn-refresh" onClick={refresh} title="Refresh">
             <svg
               width="16"
@@ -73,10 +104,12 @@ export default function HistoryPage() {
             <span className="stat-number">{history.length}</span>
             <span className="stat-label">Total</span>
           </div>
+
           <div className="stat-card stat-success">
             <span className="stat-number">{successCount}</span>
             <span className="stat-label">Successful</span>
           </div>
+
           <div className="stat-card stat-error">
             <span className="stat-number">{errorCount}</span>
             <span className="stat-label">Errors</span>
@@ -97,6 +130,7 @@ export default function HistoryPage() {
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
+
           <input
             className="history-search"
             type="text"
@@ -104,6 +138,7 @@ export default function HistoryPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+
           {search && (
             <button
               className="search-clear"
@@ -141,16 +176,20 @@ export default function HistoryPage() {
                 {displayed.map((item, i) => (
                   <li
                     key={i}
-                    className={`history-full-item${item.error ? " error-item" : ""}`}
+                    className={`history-full-item${
+                      item.error ? " error-item" : ""
+                    }`}
                   >
                     <span className="history-dot" />
+
                     <span className="history-full-text">
-                      {item.error
-                        ? `${item.errorMessage}`
-                        : `${item.input} = ${item.result}`}
+                      {formatText(item)}
                     </span>
+
                     <span
-                      className={`history-badge ${item.error ? "badge-error" : "badge-success"}`}
+                      className={`history-badge ${
+                        item.error ? "badge-error" : "badge-success"
+                      }`}
                     >
                       {item.error ? "Error" : "OK"}
                     </span>

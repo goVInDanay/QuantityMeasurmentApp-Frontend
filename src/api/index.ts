@@ -13,7 +13,7 @@ export async function loginApi(
 ): Promise<Response> {
   return fetch(`${API_BASE}/api/auth/login`, {
     method: "POST",
-    credentials: "include", // 🔥 FIX
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
@@ -106,8 +106,8 @@ export async function compareApi(req: CompareRequest): Promise<boolean> {
   return res.json();
 }
 
-export async function getHistory(): Promise<HistoryItem[]> {
-  const res = await fetch(`${API_BASE}/api/history`, {
+export async function getHistory(page = 0, size = 10): Promise<HistoryItem[]> {
+  const res = await fetch(`${API_BASE}/api/history?page=${page}&size=${size}`, {
     method: "GET",
     credentials: "include",
   });

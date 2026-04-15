@@ -4,9 +4,9 @@ import type { User } from "../types";
 
 interface Props {
   user: User | null;
+  setUser: (user: User | null) => void;
 }
-
-export default function Navbar({ user }: Props) {
+export default function Navbar({ user, setUser }: Props) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -21,6 +21,7 @@ export default function Navbar({ user }: Props) {
 
   async function handleLogout() {
     await logoutApi();
+    setUser(null);
     navigate("/", { replace: true });
   }
 

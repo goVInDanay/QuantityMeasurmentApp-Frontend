@@ -118,10 +118,9 @@ export default function Calculator({ onHistoryUpdate }: Props) {
           measurementType,
         },
       });
-
       setResult({
         status: "success",
-        text: `Result: ${data} ${unit1}`,
+        text: `Result: ${data.value} ${data.unit}`,
       });
     } catch {
       setResult({ status: "error", text: "Server error" });
@@ -152,7 +151,7 @@ export default function Calculator({ onHistoryUpdate }: Props) {
 
       setResult({
         status: "success",
-        text: `Result: ${data} ${unit1}`,
+        text: `Result: ${data.value} ${data.unit}`,
       });
     } catch {
       setResult({ status: "error", text: "Server error" });
