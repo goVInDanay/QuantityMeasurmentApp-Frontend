@@ -12,12 +12,12 @@ export async function loginApi(
   password: string,
 ): Promise<Response> {
   return fetch(`${API_BASE}/api/auth/login`, {
-    ...defaultOpts,
     method: "POST",
+    credentials: "include", // 🔥 FIX
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
 }
-
 export async function registerApi(
   name: string,
   email: string,
@@ -25,8 +25,9 @@ export async function registerApi(
   mobile: string,
 ): Promise<Response> {
   return fetch(`${API_BASE}/api/auth/register`, {
-    ...defaultOpts,
     method: "POST",
+    credentials: "include", // 🔥 ADD THIS
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, password, mobile }),
   });
 }
