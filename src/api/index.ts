@@ -12,8 +12,8 @@ export async function loginApi(
   password: string,
 ): Promise<Response> {
   return fetch(`${API_BASE}/api/auth/login`, {
-    ...defaultOpts,
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
 }
@@ -25,10 +25,11 @@ export async function registerApi(
   mobile: string,
 ): Promise<Response> {
   return fetch(`${API_BASE}/api/auth/register`, {
-    ...defaultOpts,
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, password, mobile }),
   });
+}
 }
 
 export async function logoutApi(): Promise<void> {
