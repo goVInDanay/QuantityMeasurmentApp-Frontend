@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginApi, registerApi, googleLoginUrl } from "../api";
+import { loginApi, registerApi, googleLoginUrl, getUserProfile } from "../api";
 import PasswordInput from "../components/PasswordInput";
+import { User } from "../types";
 
 type Tab = "login" | "signup";
 
-export default function AuthPage() {
+type Props = {
+  setUser: (user: User | null) => void;
+};
+
+export default function AuthPage({ setUser }: Props) {
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("signup");
 
@@ -39,19 +44,19 @@ export default function AuthPage() {
     try {
       const res = await loginApi(loginEmail, loginPassword);
       const text = await res.text();
-      const data = await res.json();
       if (res.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        const userData = await getUserProfile();
+        setUser(userData);
         setLoginMsg({
           text: "Login successful! Redirecting…",
           type: "success",
         });
-        setTimeout(() => navigate("/dashboard", { replace: true }), 4000);
+        navigate("/dashboard", { replace: true });
       } else {
         setLoginMsg({ text: text || "Login failed", type: "error" });
       }
-    } catch {
+    } catch (err) {
+      console.log(err);
       setLoginMsg({ text: "Error connecting to server.", type: "error" });
     }
   }
@@ -65,6 +70,8 @@ export default function AuthPage() {
       const res = await registerApi(regName, regEmail, regPassword, regMobile);
       const text = await res.text();
       if (res.ok) {
+        const userData = await getUserProfile();
+        setUser(userData);
         setSignupMsg({
           text: "Registered successfully! Redirecting…",
           type: "success",

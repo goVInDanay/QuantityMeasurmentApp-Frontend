@@ -20,5 +20,5 @@ export function useAuth(requireAuth = false) {
       .finally(() => setLoading(false));
   }, [requireAuth, navigate]);
 
-  return { user, loading };
+  return { user, loading, setUser };
 }
