@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginApi, registerApi, googleLoginUrl } from "../api";
+import { loginApi, registerApi } from "../api";
 import PasswordInput from "../components/PasswordInput";
 
 type Tab = "login" | "signup";
@@ -133,7 +133,7 @@ export default function AuthPage() {
             <button className="btn-primary" onClick={handleLogin}>
               Login
             </button>
-            <div className="divider">or</div>
+            {/* <div className="divider">or</div>
             <button
               className="btn-google"
               onClick={() => window.location.assign(googleLoginUrl)}
@@ -157,7 +157,7 @@ export default function AuthPage() {
                 />
               </svg>
               Continue with Google
-            </button>
+            </button> */}
           </div>
 
           {/* SIGNUP */}
